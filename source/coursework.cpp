@@ -59,6 +59,12 @@ int main( void )
     // -------------------------------------------------------------------------
     // End of window creation
     // =========================================================================
+
+    // compile shader program
+    unsigned int shaderID, lightShaderID;
+    shaderID = LoadShaders("vertexShader.glsl", "fragmentShader.glsl");
+    lightShaderID = LoadShaders("lightVertexShader.glsl", "lightFragmentShader.glsl");
+
     
     // Ensure we can capture keyboard inputs
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
