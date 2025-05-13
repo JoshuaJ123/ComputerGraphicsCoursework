@@ -3,6 +3,8 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtx/io.hpp>
 
 #include <common/shader.hpp>
 #include <common/texture.hpp>
