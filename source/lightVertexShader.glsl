@@ -5,7 +5,6 @@ layout(location = 0) in vec3 position;
 
 // Uniforms
 uniform mat4 MVP;
-uniform mat4 MV;
 
 void main()
 {
