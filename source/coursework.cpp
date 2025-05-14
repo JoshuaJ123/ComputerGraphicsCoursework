@@ -106,25 +106,30 @@ int main(void)
     cube.addTexture("../assets/crate.jpg", "diffuse");
 
     // Define cube object lighting properties
-    cube.ka = 1.0f;
-    cube.kd = 0.0f;
-    cube.ks = 0.0f;
+    cube.ka = 0.2f;
+    cube.kd = 1.0f;
+    cube.ks = 1.0f;
     cube.Ns = 20.0f;
 
     // Add light sources
     Light lightSources;
-    lightSources.addPointLight(glm::vec3(2.0f,   3.0f, 2.0f), glm::vec3(1.0f, 1.0f, 1.0f), 4.0f, 0.1f, 0.02f);
-    lightSources.addPointLight(glm::vec3(-2.0f,  3.0f, 2.0f), glm::vec3(1.0f, 1.0f, 1.0f), 4.0f, 0.1f, 0.02f);
-    lightSources.addPointLight(glm::vec3(2.0f,  3.0f, -2.0f), glm::vec3(1.0f, 1.0f, 1.0f), 4.0f, 0.1f, 0.02f);
-    lightSources.addPointLight(glm::vec3(-2.0f, 3.0f, -2.0f), glm::vec3(1.0f, 1.0f, 1.0f), 4.0f, 0.1f, 0.02f);
+    lightSources.addPointLight(glm::vec3(4.0f,   3.0f, 4.0f), glm::vec3(1.0f, 1.0f, 1.0f), 2.0f, 0.1f, 0.02f);
+    lightSources.addPointLight(glm::vec3(-4.0f,  3.0f, 4.0f), glm::vec3(1.0f, 1.0f, 1.0f), 2.0f, 0.1f, 0.02f);
+    lightSources.addPointLight(glm::vec3(4.0f,  3.0f, -4.0f), glm::vec3(1.0f, 1.0f, 1.0f), 2.0f, 0.1f, 0.02f);
+    lightSources.addPointLight(glm::vec3(-4.0f, 3.0f, -4.0f), glm::vec3(1.0f, 1.0f, 1.0f), 2.0f, 0.1f, 0.02f);
+    lightSources.addSpotLight(glm::vec3(0.0f, 3.0f, 0.0f),          // position
+                              glm::vec3(0.0f, -1.0f, 0.0f),         // direction
+                              glm::vec3(1.0f, 1.0f, 0.0f),          // colour
+                              1.0f, 0.1f, 0.02f,                    // attenuation
+                              std::cos(Maths::radians(25.0f)));     // cos(phi)
 
     // Cube positions
     glm::vec3 positions[] = {
         glm::vec3(0.0f,  0.0f,  0.0f),
-        glm::vec3(2.0f,  0.0f,  2.0f),
-        glm::vec3(-2.0f, 0.0f,  2.0f),
-        glm::vec3(2.0f,  0.0f, -2.0f),
-        glm::vec3(-2.0f, 0.0f, -2.0f),
+        glm::vec3(4.0f,  0.0f,  4.0f),
+        glm::vec3(-4.0f, 0.0f,  4.0f),
+        glm::vec3(4.0f,  0.0f, -4.0f),
+        glm::vec3(-4.0f, 0.0f, -4.0f),
     };
 
     // Add cubes to objects vector
@@ -305,6 +310,8 @@ void mouseInput(GLFWwindow* window)
     // Update yaw and pitch angles
     camera.yaw += 0.005f * float(xPos - 1024 / 2);
     camera.pitch += 0.005f * float(768 / 2 - yPos);
+
+    camera.eye.y = 1.0f;
 
     // Calculate camera vectors from the yaw and pitch angles
     camera.calculateCameraVectors();
