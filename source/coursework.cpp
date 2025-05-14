@@ -19,6 +19,7 @@ void mouseInput(GLFWwindow* window);
 float previousTime = 0.0f;  // time of previous iteration of the loop
 float deltaTime = 0.0f;  // time elapsed since the previous frame
 bool isSpinning = false;
+bool thirdPerson = false;
 
 // Create camera object
 Camera camera(glm::vec3(0.0f, 0.0f, 4.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -105,6 +106,8 @@ int main(void)
 
     // Load the textures
     cube.addTexture("../assets/crate.jpg", "diffuse");
+    cube.addTexture("../assets/neutral_normal.png", "normal");
+    cube.addTexture("../assets/neutral_specular.png", "specular");
 
     // Define cube object lighting properties
     cube.ka = 0.2f;
@@ -114,10 +117,10 @@ int main(void)
 
     // Add light sources
     Light lightSources;
-    lightSources.addPointLight(glm::vec3(4.0f,   3.0f, 4.0f), glm::vec3(1.0f, 1.0f, 1.0f), 2.0f, 0.1f, 0.02f);
-    lightSources.addPointLight(glm::vec3(-4.0f,  3.0f, 4.0f), glm::vec3(1.0f, 1.0f, 1.0f), 2.0f, 0.1f, 0.02f);
-    lightSources.addPointLight(glm::vec3(4.0f,  3.0f, -4.0f), glm::vec3(1.0f, 1.0f, 1.0f), 2.0f, 0.1f, 0.02f);
-    lightSources.addPointLight(glm::vec3(-4.0f, 3.0f, -4.0f), glm::vec3(1.0f, 1.0f, 1.0f), 2.0f, 0.1f, 0.02f);
+    lightSources.addPointLight(glm::vec3(4.0f,   3.0f, 4.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.1f, 0.02f);
+    lightSources.addPointLight(glm::vec3(-4.0f,  3.0f, 4.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.1f, 0.02f);
+    lightSources.addPointLight(glm::vec3(4.0f,  3.0f, -4.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.1f, 0.02f);
+    lightSources.addPointLight(glm::vec3(-4.0f, 3.0f, -4.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f, 0.1f, 0.02f);
     lightSources.addSpotLight(glm::vec3(0.0f, 3.0f, 0.0f),          // position
                               glm::vec3(0.0f, -1.0f, 0.0f),         // direction
                               glm::vec3(1.0f, 1.0f, 0.0f),          // colour
@@ -211,6 +214,24 @@ int main(void)
     object.name = "wall";
     objects.push_back(object);
 
+    // Adding the suzanne model
+    Model suzanne("../assets/suzanne.obj");
+    suzanne.addTexture("../assets/suzanne_diffuse.png", "diffuse");
+    suzanne.addTexture("../assets/suzanne_normal.png", "normal");
+    suzanne.addTexture("../assets/neutral_specular.png", "specular");
+
+    suzanne.ka = 0.2f;
+    suzanne.kd = 1.0f;
+    suzanne.ks = 1.0f;
+    suzanne.Ns = 20.0f;
+
+    object.position = glm::vec3(camera.eye.x, 1.0f, camera.eye.z);
+    object.rotation = glm::vec3(0.0f, 1.0f, 0.0f);
+    object.scale = glm::vec3(0.25f, 0.25f, 0.25f);
+    object.angle = 0.0f;
+    object.name = "suzanne";
+    objects.push_back(object);
+
     // Render loop
     while (!glfwWindowShouldClose(window))
     {
@@ -255,19 +276,26 @@ int main(void)
             glUniformMatrix4fv(glGetUniformLocation(shaderID, "MV"), 1, GL_FALSE, &MV[0][0]);
 
             // Draw the model
-            if (objects[i].name == "cube")
+            if (objects[i].name == "cube") {
                 if (isSpinning) {
                     objects[i].angle += 0.5f * deltaTime;
                     cube.draw(shaderID);
                 }
-                else	
+                else
                     cube.draw(shaderID);
+            }
 
             if (objects[i].name == "floor")
                 floor.draw(shaderID);
 
             if (objects[i].name == "wall")
                 wall.draw(shaderID);
+
+            if (objects[i].name == "suzanne") {
+                if (thirdPerson){
+                    suzanne.draw(shaderID);
+                }
+            }
         }
 
         // Draw light sources
@@ -308,11 +336,16 @@ void keyboardInput(GLFWwindow* window)
     static bool key1Pressed = false;
     bool key1State = glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS;
 
-
     if (key1State && !key1Pressed)
         isSpinning = !isSpinning;
 
     key1Pressed = key1State;
+
+    static bool keySpacePressed = false;
+    bool keySpaceState = glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS;
+
+    if (keySpaceState && !keySpacePressed)
+        thirdPerson = !thirdPerson;
 }
 
 void mouseInput(GLFWwindow* window)
