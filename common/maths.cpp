@@ -43,6 +43,27 @@ glm::mat4 Maths::myPerspective(float fov, float aspect, float near, float far)
 
 }
 
+glm::mat4 Maths::myLookAt(const glm::vec3& eye, const glm::vec3& target, const glm::vec3& worldUp)
+{
+	glm::mat4 lookAt(1.0f);
+    glm::vec3 front = glm::normalize(target - eye);
+    glm::vec3 right = glm::normalize(glm::cross(worldUp, front));
+    glm::vec3 up    = glm::cross(front, right);
+	lookAt[0][0] = right.x;
+	lookAt[1][0] = right.y;
+	lookAt[2][0] = right.z;
+	lookAt[3][0] = -glm::dot(right, eye);
+	lookAt[0][1] = up.x;
+	lookAt[1][1] = up.y;
+	lookAt[2][1] = up.z;
+	lookAt[3][1] = -glm::dot(up, eye);
+	lookAt[0][2] = -front.x;
+	lookAt[1][2] = -front.y;
+	lookAt[2][2] = -front.z;
+	lookAt[3][2] = glm::dot(front, eye);
+	return lookAt;
+}
+
 // Quaternions
 Quaternion::Quaternion() {}
 
