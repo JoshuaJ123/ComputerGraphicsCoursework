@@ -31,4 +31,6 @@ public:
 	static Quaternion SLERP(const Quaternion q1, const Quaternion q2, const float t);
 	static glm::mat4 myPerspective(float fov, float aspect, float near, float far);
 	static glm::mat4 myLookAt(const glm::vec3& eye, const glm::vec3& target, const glm::vec3& worldUp);
+	static glm::vec3 Maths::myCross(const glm::vec3& a, const glm::vec3& b);
+	static float Maths::myDot(const glm::vec3& a, const glm::vec3& b);
 };

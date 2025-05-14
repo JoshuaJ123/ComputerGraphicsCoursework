@@ -48,20 +48,34 @@ glm::mat4 Maths::myLookAt(const glm::vec3& eye, const glm::vec3& target, const g
 	glm::mat4 lookAt(1.0f);
     glm::vec3 front = glm::normalize(target - eye);
     glm::vec3 right = glm::normalize(glm::cross(worldUp, front));
-    glm::vec3 up    = glm::cross(front, right);
+    glm::vec3 up    = myCross(front, right);
 	lookAt[0][0] = right.x;
 	lookAt[1][0] = right.y;
 	lookAt[2][0] = right.z;
-	lookAt[3][0] = -glm::dot(right, eye);
+	lookAt[3][0] = myDot(right, eye);
 	lookAt[0][1] = up.x;
 	lookAt[1][1] = up.y;
 	lookAt[2][1] = up.z;
-	lookAt[3][1] = -glm::dot(up, eye);
+	lookAt[3][1] = myDot(up, eye);
 	lookAt[0][2] = -front.x;
 	lookAt[1][2] = -front.y;
 	lookAt[2][2] = -front.z;
-	lookAt[3][2] = glm::dot(front, eye);
+	lookAt[3][2] = myDot(front, eye);
 	return lookAt;
+}
+
+glm::vec3 Maths::myCross(const glm::vec3& a, const glm::vec3& b)
+{
+	glm::vec3 cross;
+	cross.x = a.y * b.z - a.z * b.y;
+	cross.y = a.z * b.x - a.x * b.z;
+	cross.z = a.x * b.y - a.y * b.x;
+	return cross;
+}
+
+float Maths::myDot(const glm::vec3& a, const glm::vec3& b)
+{
+	return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
 // Quaternions

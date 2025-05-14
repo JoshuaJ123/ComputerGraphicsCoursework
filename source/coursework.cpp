@@ -18,6 +18,7 @@ void mouseInput(GLFWwindow* window);
 // Frame timers
 float previousTime = 0.0f;  // time of previous iteration of the loop
 float deltaTime = 0.0f;  // time elapsed since the previous frame
+bool isSpinning = false;
 
 // Create camera object
 Camera camera(glm::vec3(0.0f, 0.0f, 4.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -139,7 +140,7 @@ int main(void)
     for (unsigned int i = 0; i < 5; i++)
     {
         object.position = positions[i];
-        object.rotation = glm::vec3(1.0f, 1.0f, 1.0f);
+        object.rotation = glm::vec3(0.0f, 1.0f, 0.0f);
         object.scale = glm::vec3(0.5f, 0.5f, 0.5f);
         object.angle = 0.0f;
         objects.push_back(object);
@@ -255,7 +256,12 @@ int main(void)
 
             // Draw the model
             if (objects[i].name == "cube")
-                cube.draw(shaderID);
+                if (isSpinning) {
+                    objects[i].angle += 0.5f * deltaTime;
+                    cube.draw(shaderID);
+                }
+                else	
+                    cube.draw(shaderID);
 
             if (objects[i].name == "floor")
                 floor.draw(shaderID);
@@ -298,6 +304,15 @@ void keyboardInput(GLFWwindow* window)
 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.eye += 5.0f * deltaTime * camera.right;
+
+    static bool key1Pressed = false;
+    bool key1State = glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS;
+
+
+    if (key1State && !key1Pressed)
+        isSpinning = !isSpinning;
+
+    key1Pressed = key1State;
 }
 
 void mouseInput(GLFWwindow* window)
