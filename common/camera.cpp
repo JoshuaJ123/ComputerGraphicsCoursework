@@ -1,4 +1,5 @@
 #include <common/camera.hpp>
+#include <common/maths.hpp>
 
 Camera::Camera(const glm::vec3 Eye, const glm::vec3 Target)
 {
@@ -15,7 +16,7 @@ void Camera::calculateMatrices()
 	view = glm::lookAt(eye, eye + front, worldUp);
 
 	// Calculate the projection matrix
-	projection = glm::perspective(fov, aspect, near, far);
+	projection = Maths::myPerspective(fov, aspect, near, far);
 }
 
 void Camera::calculateCameraVectors()
@@ -37,7 +38,7 @@ void Camera::quaternionCamera()
 	view = orientation.matrix() * Maths::translate(-eye);
 
 	// Calculate the projection matrix
-	projection = glm::perspective(fov, aspect, near, far);
+	projection = Maths::myPerspective(fov, aspect, near, far);
 
 	// Calculate camera vectors from view matrix
 	right = glm::vec3(view[0][0], view[1][0], view[2][0]);

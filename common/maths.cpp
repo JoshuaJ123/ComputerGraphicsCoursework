@@ -29,6 +29,20 @@ glm::mat4 Maths::rotate(const float& angle, glm::vec3 v)
 	return q.matrix();
 }
 
+glm::mat4 Maths::myPerspective(float fov, float aspect, float near, float far)
+{
+	glm::mat4 perspective(0.0f);
+	float top = tan(fov / 2) * near;
+	float right = top * aspect;
+	perspective[0][0] = near / right;
+	perspective[1][1] = near / top;
+	perspective[2][2] = -((far + near) / (far - near));
+	perspective[2][3] = -1.0f;
+	perspective[3][2] = -((2 * far * near) / (far - near));
+	return perspective;
+
+}
+
 // Quaternions
 Quaternion::Quaternion() {}
 

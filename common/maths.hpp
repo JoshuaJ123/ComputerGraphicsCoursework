@@ -29,4 +29,5 @@ public:
 	static float radians(float angle);
 	static glm::mat4 rotate(const float& angle, glm::vec3 v);
 	static Quaternion SLERP(const Quaternion q1, const Quaternion q2, const float t);
+	static glm::mat4 myPerspective(float fov, float aspect, float near, float far);
 };
