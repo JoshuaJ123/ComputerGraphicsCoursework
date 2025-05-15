@@ -20,6 +20,8 @@ float previousTime = 0.0f;  // time of previous iteration of the loop
 float deltaTime = 0.0f;  // time elapsed since the previous frame
 bool isSpinning = false;
 bool thirdPerson = false;
+glm::vec3 minPos = glm::vec3(-9.5f, 1.0f, -9.5f);
+glm::vec3 maxPos = glm::vec3(9.5f, 1.0f, 9.5f);
 
 // Create camera object
 Camera camera(glm::vec3(0.0f, 0.0f, 4.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -346,6 +348,8 @@ void keyboardInput(GLFWwindow* window)
 
     if (keySpaceState && !keySpacePressed)
         thirdPerson = !thirdPerson;
+
+    camera.eye = glm::clamp(camera.eye, minPos, maxPos);
 }
 
 void mouseInput(GLFWwindow* window)
