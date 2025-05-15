@@ -279,12 +279,9 @@ int main(void)
 
             // Draw the model
             if (objects[i].name == "cube") {
-                if (isSpinning) {
+                if (isSpinning)
                     objects[i].angle += 0.5f * deltaTime;
-                    cube.draw(shaderID);
-                }
-                else
-                    cube.draw(shaderID);
+                cube.draw(shaderID);
             }
 
             if (objects[i].name == "floor")

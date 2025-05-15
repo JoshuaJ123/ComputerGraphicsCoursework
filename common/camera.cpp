@@ -14,9 +14,11 @@ void Camera::calculateMatrices()
 
 	// Calculate the view matrix
 	view = Maths::myLookAt(eye, eye + front, worldUp);
+	//view = glm::lookAt(eye, eye + front, worldUp);
 
 	// Calculate the projection matrix
 	projection = Maths::myPerspective(fov, aspect, near, far);
+	//projection = glm::perspective(fov, aspect, near, far);
 }
 
 void Camera::calculateCameraVectors()
